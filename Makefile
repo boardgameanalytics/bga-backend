@@ -1,11 +1,5 @@
-init-backend:
-	poetry install --with backend
-
-init-pipeline:
-	poetry install --with pipeline
-
 init:
-	poetry install --with backend,pipeline,dev
+	poetry install --with web,pipeline,dev
 
 lint:
 	black . --check
@@ -16,3 +10,15 @@ lint:
 format:
 	black .
 	isort . --profile=black
+
+build-web:
+	docker build -f docker/web.Dockerfile --tag bga-backend-web .
+
+docker-up:
+	docker compose -f compose.yaml up -d
+
+docker-all-logs:
+	docker compose logs
+
+docker-down:
+	docker compose down

@@ -1,14 +1,19 @@
 # Board Game Analytics Backend
 
+## Overview
+
+Description of repository
+
 ### Instances
 
-- App
-  - API
-  - ETL Pipeline
+- App (API)
+- ETL Pipeline
 - DB
 
-### ETL Process
+## Set Up
 
-- Extract and store XML files
-- Transform XML into tabular data
-- Load data into DB
+...
+
+## Testing
+
+...
