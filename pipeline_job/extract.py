@@ -8,7 +8,7 @@ from time import sleep
 import requests
 from dotenv import load_dotenv
 
-from pipeline_job.bgg_api.bggxmlapi2 import BggXmlApi2
+from pipeline_job.bggxmlapi2 import BggXmlApi2
 
 
 def get_authenticated_session() -> requests.Session:

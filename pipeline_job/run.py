@@ -3,11 +3,11 @@ from pathlib import Path
 
 import pandas
 
-from pipeline_job.bgg_api.extract import (
+from pipeline_job.extract import (
     download_latest_rankings_dump,
     extract_game_data,
 )
-from pipeline_job.bgg_api.transform_xml import save_processed_data, transform_xml_files
+from pipeline_job.transform_xml import save_processed_data, transform_xml_files
 
 if __name__ == "__main__":
     root_path = Path("./data") / datetime.now().strftime("%Y/%m/%d")
