@@ -1,27 +1,24 @@
 import html.parser
 import zipfile
 from io import BytesIO
-from os import getenv
 from pathlib import Path
 from time import sleep
 
 import requests
-from dotenv import load_dotenv
 
-from pipeline_job.bggxmlapi2 import BggXmlApi2
+from pipeline import config
+from pipeline.bggxmlapi2 import BggXmlApi2
 
 
 def get_authenticated_session() -> requests.Session:
     """Create authenticated Requests session with BGG.com"""
-    load_dotenv()
-
     session = requests.Session()
     res = session.post(
         url="https://boardgamegeek.com/login/api/v1",
         json={
             "credentials": {
-                "username": getenv("BGG_USERNAME"),
-                "password": getenv("BGG_PASSWORD"),
+                "username": config.bgg_username,
+                "password": config.bgg_password,
             }
         },
     )

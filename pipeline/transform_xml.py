@@ -34,8 +34,7 @@ def parse_bgg_xml_to_dict(item: Element) -> dict[str, Any]:
     return {
         "game": {
             "game_id": game_id,
-            "type": item.get("type"),
-            "name": item.find("name[@type='primary']").get("value"),
+            "title": item.find("name[@type='primary']").get("value"),
             "description": parse_description(item.findtext("description", default="")),
             "year_published": item.find("yearpublished").get("value"),
             "min_players": item.find("minplayers").get("value"),
@@ -47,7 +46,7 @@ def parse_bgg_xml_to_dict(item: Element) -> dict[str, Any]:
             "total_ratings": item_ratings.find("usersrated").get("value"),
             "avg_rating": item_ratings.find("average").get("value"),
             "bayes_rating": item_ratings.find("bayesaverage").get("value"),
-            "std_dev": item_ratings.find("stddev").get("value"),
+            "std_dev_ratings": item_ratings.find("stddev").get("value"),
             "owned_copies": item_ratings.find("owned").get("value"),
             "wishlist": item_ratings.find("wishing").get("value"),
             "total_weights": item_ratings.find("numweights").get("value"),
@@ -77,12 +76,12 @@ def separate_link_types(links_df: pandas.DataFrame) -> dict[str, pandas.DataFram
     for name, df in links_df.drop_duplicates().groupby("link_type"):
         group_df = df.drop(columns="link_type").reset_index(drop=True)
 
-        transformed_data[f"{name}_link"] = group_df.drop(columns=["link_name"]).rename(
-            columns={"link_id": f"{name}_id"}
-        )
-        transformed_data[f"{name}_details"] = group_df.drop(columns=["game_id"]).rename(
-            columns={"link_id": f"{name}_id", "link_name": f"{name}_name"}
-        )
+        transformed_data[f"links/{name}_link"] = group_df.drop(
+            columns=["link_name"]
+        ).rename(columns={"link_id": f"{name}_id"})
+        transformed_data[f"details/{name}_details"] = group_df.drop(
+            columns=["game_id"]
+        ).rename(columns={"link_id": f"{name}_id", "link_name": f"{name}_name"})
 
     return transformed_data
 
@@ -110,7 +109,7 @@ def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
             continue
 
     transformed_data = separate_link_types(pandas.DataFrame.from_records(all_links))
-    transformed_data["game_details"] = pandas.DataFrame.from_records(all_games)
+    transformed_data["details/game_details"] = pandas.DataFrame.from_records(all_games)
 
     return transformed_data
 
