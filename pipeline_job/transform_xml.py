@@ -100,20 +100,19 @@ def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
 
     for xml_file in xml_dir.glob("*.xml"):
         try:
-            tree = ElementTree.parse(xml_file)
+            for item in ElementTree.parse(xml_file).findall(".//item"):
+                if item.get("id"):
+                    parsed_data = parse_bgg_xml_to_dict(item)
+                    all_games.append(parsed_data["game"])
+                    all_links.extend(parsed_data["links"])
         except ElementTree.ParseError as e:
             logging.error(f"Failed to parse {xml_file}: {e}")
             continue
-        for item in tree.findall(".//item"):
-            if item.get("id"):
-                parsed_data = parse_bgg_xml_to_dict(item)
-                all_games.append(parsed_data["game"])
-                all_links.extend(parsed_data["links"])
 
-    links_df = pandas.DataFrame.from_records(all_links)
-    transformed_data = separate_link_types(links_df)
+    transformed_data = separate_link_types(pandas.DataFrame.from_records(all_links))
+    transformed_data["game_details"] = pandas.DataFrame.from_records(all_games)
 
-    return transformed_data | {"game_details": pandas.DataFrame.from_records(all_games)}
+    return transformed_data
 
 
 def save_processed_data(destination_dir: Path, **kwargs: pandas.DataFrame) -> None:
