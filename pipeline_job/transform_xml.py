@@ -1,5 +1,5 @@
 # mypy: disable-error-code="union-attr"
-
+import logging
 import re
 from pathlib import Path
 from typing import Any
@@ -65,6 +65,28 @@ def parse_bgg_xml_to_dict(item: Element) -> dict[str, Any]:
     }
 
 
+def separate_link_types(links_df: pandas.DataFrame) -> dict[str, pandas.DataFrame]:
+    """
+    Separate links DataFrame into separate dataframes for each link type.
+
+    :param links_df: Links DataFrame
+
+    :return dict[str, pandas.DataFrame]: Dictionary of link type DataFrames.
+    """
+    transformed_data = {}
+    for name, df in links_df.drop_duplicates().groupby("link_type"):
+        group_df = df.drop(columns="link_type").reset_index(drop=True)
+
+        transformed_data[f"{name}_link"] = group_df.drop(columns=["link_name"]).rename(
+            columns={"link_id": f"{name}_id"}
+        )
+        transformed_data[f"{name}_details"] = group_df.drop(columns=["game_id"]).rename(
+            columns={"link_id": f"{name}_id", "link_name": f"{name}_name"}
+        )
+
+    return transformed_data
+
+
 def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
     """
     Transform XML game data to Pandas DataFrames
@@ -77,17 +99,21 @@ def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
     all_links = []
 
     for xml_file in xml_dir.glob("*.xml"):
-        tree = ElementTree.parse(xml_file)
+        try:
+            tree = ElementTree.parse(xml_file)
+        except ElementTree.ParseError as e:
+            logging.error(f"Failed to parse {xml_file}: {e}")
+            continue
         for item in tree.findall(".//item"):
             if item.get("id"):
                 parsed_data = parse_bgg_xml_to_dict(item)
                 all_games.append(parsed_data["game"])
                 all_links.extend(parsed_data["links"])
 
-    return {
-        "games": pandas.DataFrame.from_records(all_games),
-        "links": pandas.DataFrame.from_records(all_links),
-    }
+    links_df = pandas.DataFrame.from_records(all_links)
+    transformed_data = separate_link_types(links_df)
+
+    return transformed_data | {"game_details": pandas.DataFrame.from_records(all_games)}
 
 
 def save_processed_data(destination_dir: Path, **kwargs: pandas.DataFrame) -> None:
