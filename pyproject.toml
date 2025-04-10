@@ -14,25 +14,14 @@ package-mode = false
 python = "^3.10"
 sqlalchemy = "^2.0.40"
 
-[tool.poetry.group.web]
-optional = true
-
 [tool.poetry.group.web.dependencies]
 fastapi = { extras = ["standard"], version = "^0.115.12" }
 uvicorn = "^0.34.0"
 
-[tool.poetry.group.pipeline]
-optional = true
-
 [tool.poetry.group.pipeline.dependencies]
 requests = "^2.32.3"
-types-requests = "*"
 pandas = "^2.2.3"
-pandas-stubs = "*"
 python-dotenv = "*"
-
-[tool.poetry.group.dev]
-optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -40,6 +29,8 @@ flake8 = "*"
 black = "*"
 mypy = "*"
 isort = "*"
+pandas-stubs = "*"
+types-requests = "*"
 
 [build-system]
 requires = ["poetry-core"]

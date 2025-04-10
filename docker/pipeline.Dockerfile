@@ -4,7 +4,7 @@ WORKDIR /pipeline
 
 COPY ../poetry.lock pyproject.toml ./
 RUN pip install poetry
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --with pipeline
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --only main,pipeline
 
 COPY ../pipeline ./pipeline
 
