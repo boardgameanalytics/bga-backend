@@ -45,5 +45,6 @@ jobs:
           poetry install --no-interaction --no-ansi
 
       - name: Test with pytest
+        working-directory: .
         run: |
-          pytest --rootdir=.
+          pytest
