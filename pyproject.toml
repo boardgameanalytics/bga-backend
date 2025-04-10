@@ -39,6 +39,7 @@ pytest = "*"
 flake8 = "*"
 black = "*"
 mypy = "*"
+isort = "*"
 
 [build-system]
 requires = ["poetry-core"]

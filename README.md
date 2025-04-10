@@ -73,5 +73,5 @@ To run locally, install the virtual environment using `poetry`. Dependencies are
 Docker image.
 
 ```bash
-poetry install --with all
+poetry install --with web,pipeline,dev
 ```
