@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 
+import app.db.models as models  # type: ignore
 from app import config
 from app.db.db_session import DatabaseSession  # type: ignore
-import app.db.models as models  # type: ignore
 
 app = FastAPI()
 
 db = DatabaseSession(connection_string=config.db_url)
+
 
 @app.get("/")
 async def root():
@@ -16,6 +17,7 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
 
 @app.get("/games")
 async def games():

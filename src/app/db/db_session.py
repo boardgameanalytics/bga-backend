@@ -3,11 +3,11 @@ db_session.py - Module for creating a read-only SQLAlchemy session
 for the boardgame analytics database.
 """
 
-
 import contextlib
-from sqlalchemy import create_engine, Engine
-from sqlalchemy.orm import sessionmaker, scoped_session, Session
+
+from sqlalchemy import Engine, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 # Create base class for declarative models
 Base = declarative_base()
@@ -27,7 +27,9 @@ class DatabaseSession:
         """
         self.connection_string: str = connection_string
         self.engine: Engine = self._create_engine()
-        self.Session: scoped_session[Session] = self._create_session_factory(self.engine)
+        self.Session: scoped_session[Session] = self._create_session_factory(
+            self.engine
+        )
 
     def _create_engine(self) -> Engine:
         """
@@ -37,7 +39,7 @@ class DatabaseSession:
         """
         return create_engine(
             self.connection_string,
-            connect_args={"options": "-c default_transaction_read_only=on"}
+            connect_args={"options": "-c default_transaction_read_only=on"},
         )
 
     @staticmethod

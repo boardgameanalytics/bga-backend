@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, ForeignKey, Text
+from sqlalchemy import Column, Float, ForeignKey, Integer, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
@@ -7,7 +7,7 @@ Base = declarative_base()
 
 
 class GameDetails(Base):  # type: ignore
-    __tablename__ = 'game_details'
+    __tablename__ = "game_details"
 
     game_id = Column(Integer, primary_key=True)
     title = Column(Text, nullable=False)
@@ -26,7 +26,12 @@ class GameDetails(Base):  # type: ignore
     total_weights = Column(Integer)
     owned_copies = Column(Integer)
     wishlist = Column(Integer)
-    popularity = Column(Float, server_default=text("(LN(ABS((bayes_rating - 5.5) * total_ratings) + 1) * SIGN((bayes_rating - 5.5)))"))
+    popularity = Column(
+        Float,
+        server_default=text(
+            "(LN(ABS((bayes_rating - 5.5) * total_ratings) + 1) * SIGN((bayes_rating - 5.5)))"
+        ),
+    )
 
     # Relationships
     mechanics = relationship("GameMechanicLink", back_populates="game")
@@ -37,7 +42,7 @@ class GameDetails(Base):  # type: ignore
 
 
 class MechanicDetails(Base):  # type: ignore
-    __tablename__ = 'mechanic_details'
+    __tablename__ = "mechanic_details"
 
     mechanic_id = Column(Integer, primary_key=True)
     mechanic_name = Column(Text, nullable=False)
@@ -47,7 +52,7 @@ class MechanicDetails(Base):  # type: ignore
 
 
 class CategoryDetails(Base):  # type: ignore
-    __tablename__ = 'category_details'
+    __tablename__ = "category_details"
 
     category_id = Column(Integer, primary_key=True)
     category_name = Column(Text, nullable=False)
@@ -57,7 +62,7 @@ class CategoryDetails(Base):  # type: ignore
 
 
 class ArtistDetails(Base):  # type: ignore
-    __tablename__ = 'artist_details'
+    __tablename__ = "artist_details"
 
     artist_id = Column(Integer, primary_key=True)
     artist_name = Column(Text, nullable=False)
@@ -67,7 +72,7 @@ class ArtistDetails(Base):  # type: ignore
 
 
 class PublisherDetails(Base):  # type: ignore
-    __tablename__ = 'publisher_details'
+    __tablename__ = "publisher_details"
 
     publisher_id = Column(Integer, primary_key=True)
     publisher_name = Column(Text, nullable=False)
@@ -77,7 +82,7 @@ class PublisherDetails(Base):  # type: ignore
 
 
 class DesignerDetails(Base):  # type: ignore
-    __tablename__ = 'designer_details'
+    __tablename__ = "designer_details"
 
     designer_id = Column(Integer, primary_key=True)
     designer_name = Column(Text, nullable=False)
@@ -87,10 +92,12 @@ class DesignerDetails(Base):  # type: ignore
 
 
 class GameMechanicLink(Base):  # type: ignore
-    __tablename__ = 'game_mechanic_link'
+    __tablename__ = "game_mechanic_link"
 
-    game_id = Column(Integer, ForeignKey('game_details.game_id'), primary_key=True)
-    mechanic_id = Column(Integer, ForeignKey('mechanic_details.mechanic_id'), primary_key=True)
+    game_id = Column(Integer, ForeignKey("game_details.game_id"), primary_key=True)
+    mechanic_id = Column(
+        Integer, ForeignKey("mechanic_details.mechanic_id"), primary_key=True
+    )
 
     # Relationships
     game = relationship("GameDetails", back_populates="mechanics")
@@ -98,10 +105,12 @@ class GameMechanicLink(Base):  # type: ignore
 
 
 class GameCategoryLink(Base):  # type: ignore
-    __tablename__ = 'game_category_link'
+    __tablename__ = "game_category_link"
 
-    game_id = Column(Integer, ForeignKey('game_details.game_id'), primary_key=True)
-    category_id = Column(Integer, ForeignKey('category_details.category_id'), primary_key=True)
+    game_id = Column(Integer, ForeignKey("game_details.game_id"), primary_key=True)
+    category_id = Column(
+        Integer, ForeignKey("category_details.category_id"), primary_key=True
+    )
 
     # Relationships
     game = relationship("GameDetails", back_populates="categories")
@@ -109,10 +118,12 @@ class GameCategoryLink(Base):  # type: ignore
 
 
 class GameDesignerLink(Base):  # type: ignore
-    __tablename__ = 'game_designer_link'
+    __tablename__ = "game_designer_link"
 
-    game_id = Column(Integer, ForeignKey('game_details.game_id'), primary_key=True)
-    designer_id = Column(Integer, ForeignKey('designer_details.designer_id'), primary_key=True)
+    game_id = Column(Integer, ForeignKey("game_details.game_id"), primary_key=True)
+    designer_id = Column(
+        Integer, ForeignKey("designer_details.designer_id"), primary_key=True
+    )
 
     # Relationships
     game = relationship("GameDetails", back_populates="designers")
@@ -120,10 +131,12 @@ class GameDesignerLink(Base):  # type: ignore
 
 
 class GameArtistLink(Base):  # type: ignore
-    __tablename__ = 'game_artist_link'
+    __tablename__ = "game_artist_link"
 
-    game_id = Column(Integer, ForeignKey('game_details.game_id'), primary_key=True)
-    artist_id = Column(Integer, ForeignKey('artist_details.artist_id'), primary_key=True)
+    game_id = Column(Integer, ForeignKey("game_details.game_id"), primary_key=True)
+    artist_id = Column(
+        Integer, ForeignKey("artist_details.artist_id"), primary_key=True
+    )
 
     # Relationships
     game = relationship("GameDetails", back_populates="artists")
@@ -131,10 +144,12 @@ class GameArtistLink(Base):  # type: ignore
 
 
 class GamePublisherLink(Base):  # type: ignore
-    __tablename__ = 'game_publisher_link'
+    __tablename__ = "game_publisher_link"
 
-    game_id = Column(Integer, ForeignKey('game_details.game_id'), primary_key=True)
-    publisher_id = Column(Integer, ForeignKey('publisher_details.publisher_id'), primary_key=True)
+    game_id = Column(Integer, ForeignKey("game_details.game_id"), primary_key=True)
+    publisher_id = Column(
+        Integer, ForeignKey("publisher_details.publisher_id"), primary_key=True
+    )
 
     # Relationships
     game = relationship("GameDetails", back_populates="publishers")

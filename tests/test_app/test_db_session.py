@@ -21,7 +21,8 @@ class TestDatabaseSession:
         # Assert
         assert db_session.connection_string == connection_string
         mock_create_engine.assert_called_once_with(
-            connection_string, connect_args={"options": "-c default_transaction_read_only=on"}
+            connection_string,
+            connect_args={"options": "-c default_transaction_read_only=on"},
         )
         mock_sessionmaker.assert_called_once_with(bind=ANY)
         mock_scoped_session.assert_called_once()
@@ -37,14 +38,19 @@ class TestDatabaseSession:
 
         # Assert
         mock_create_engine.assert_called_once_with(
-            connection_string, connect_args={"options": "-c default_transaction_read_only=on"}
+            connection_string,
+            connect_args={"options": "-c default_transaction_read_only=on"},
         )
 
     def test_create_session_factory(self, mocker: MockerFixture):
         # Arrange
         mock_engine = mocker.MagicMock(spec=Engine)
-        mock_sessionmaker = mocker.patch("src.app.db.db_session.sessionmaker", return_value="mock_sessionmaker")
-        mock_scoped_session = mocker.patch("src.app.db.db_session.scoped_session", return_value="mock_scoped_session")
+        mock_sessionmaker = mocker.patch(
+            "src.app.db.db_session.sessionmaker", return_value="mock_sessionmaker"
+        )
+        mock_scoped_session = mocker.patch(
+            "src.app.db.db_session.scoped_session", return_value="mock_scoped_session"
+        )
 
         # Act
         session_factory = DatabaseSession._create_session_factory(mock_engine)
@@ -92,4 +98,3 @@ class TestDatabaseSession:
 
         # Assert
         mock_close.assert_called_once()
-
