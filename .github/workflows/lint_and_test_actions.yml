@@ -43,7 +43,13 @@ jobs:
           pip install poetry
           poetry config virtualenvs.create false
           poetry install --no-interaction --no-ansi
-
+      - name: Debug test environment
+        run: |
+          echo "PWD=$(pwd)"
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "PYTHONPATH=$GITHUB_WORKSPACE/src"
+          ls -la $GITHUB_WORKSPACE/src
+          python -c "import sys; print(sys.path)"
       - name: Test with pytest
         run: |
           PYTHONPATH=$GITHUB_WORKSPACE/src pytest
