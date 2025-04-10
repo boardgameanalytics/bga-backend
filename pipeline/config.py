@@ -17,3 +17,5 @@ bgg_username = os.getenv("BGG_USERNAME")
 bgg_password = os.getenv("BGG_PASSWORD")
 
 data_path = Path(os.getenv("DATA_PATH")) / datetime.now().strftime("%Y/%m/%d")
+
+top_k_only = int(os.getenv("TOP_K_ONLY"), 0)
