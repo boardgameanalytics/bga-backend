@@ -43,13 +43,6 @@ jobs:
           pip install poetry
           poetry config virtualenvs.create false
           poetry install --no-interaction --no-ansi
-      - name: Debug test environment
-        run: |
-          python -c "import sys; print(sys.path)"
-        env:
-          PYTHONPATH: ${{ github.workspace }}/src
       - name: Test with pytest
-        run: |
-          pytest
-        env:
-          PYTHONPATH: ${{ github.workspace }}/src
+        working-directory: ${{ github.workspace }}
+        run: pytest
