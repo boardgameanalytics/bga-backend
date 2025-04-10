@@ -1,3 +1,5 @@
+name: Push Actions
+
 on: [push]
 
 permissions:
@@ -44,4 +46,4 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest
+          pytest --rootdir=.
