@@ -47,9 +47,9 @@ jobs:
         run: |
           python -c "import sys; print(sys.path)"
         env:
-          PYTHONPATH: ${{ github_workspace }}/src
+          PYTHONPATH: ${{ github.workspace }}/src
       - name: Test with pytest
         run: |
           pytest
         env:
-          PYTHONPATH: ${{ github_workspace }}/src
+          PYTHONPATH: ${{ github.workspace }}/src
