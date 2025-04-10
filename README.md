@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository holds the backend and data engineering code for the BoardGameAnalytics stack. It uses Docker containers
+This repository hosts the backend and data engineering code for the BoardGameAnalytics stack. It uses Docker containers
 to host the web backend, Postgres database, and data pipeline.
 
 ## Dependencies
@@ -42,19 +42,29 @@ Save the password for each Postgres user (bga_pipeline, bga_user, and postgres) 
 - `bga_user_password.txt`
 - `postgres_password.txt`
 
-Once the secrets and `.env` file are in ready, the stack is ready to be spun up.
+Once the secrets and `.env` file are ready, the stack is ready to be spun up.
 
-Use `docker compose` to build and run the stack. One of the instances is the `pipeline_job`, which will populate the
+Use `docker compose` to build and run the stack. One of the containers is the `pipeline_job`, which will populate the
 database and then exit on completion.
-
 ```bash
 docker compose up -d
 ```
 
 You can follow the logs for the job as well:
-
 ```bash
 docker compose logs pipeline_job
+```
+
+You can safely shut down the stack with:
+
+```bash
+docker compose down
+```
+
+If you want to start the stack without running the `pipeline_job`, you can do so using
+
+```bash
+docker compose up web db -d
 ```
 
 ### Development
@@ -65,7 +75,3 @@ Docker image.
 ```bash
 poetry install --with all
 ```
-
-## Testing
-
-...
