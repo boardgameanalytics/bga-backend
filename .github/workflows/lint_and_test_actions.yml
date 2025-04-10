@@ -46,4 +46,8 @@ jobs:
 
       - name: Test with pytest
         run: |
-          PYTHONPATH=src pytest
+          echo $PYTHONPATH
+          ls -la
+          pytest
+        env:
+          PYTHONPATH: src
