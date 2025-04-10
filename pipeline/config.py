@@ -16,4 +16,4 @@ db_url = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}/{db_name}"
 bgg_username = os.getenv("BGG_USERNAME")
 bgg_password = os.getenv("BGG_PASSWORD")
 
-data_path = Path(os.getenv("DATA_PATH", "./data")) / datetime.now().strftime("%Y/%m/%d")
+data_path = Path(os.getenv("DATA_PATH")) / datetime.now().strftime("%Y/%m/%d")

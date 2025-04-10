@@ -1,6 +1,7 @@
 services:
   web:
-    build: "bga-backend-web"
+    build:
+      dockerfile: ./docker/web.Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -26,10 +27,23 @@ services:
       - postgres_password
       - bga_user_password
       - bga_pipeline_password
+  pipeline_job:
+    build:
+      dockerfile: ./docker/pipeline.Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - data-lake:/data
 
 volumes:
   db-data:
     name: "postgres-data"
+    driver: local
+  data-lake:
+    name: "pipeline-data-lake"
     driver: local
 
 secrets:

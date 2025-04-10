@@ -19,7 +19,7 @@ if __name__ == "__main__":
     game_id_list = pandas.read_csv(
         rankings_csv_path / "boardgames_ranks.csv", usecols=["id"]
     )["id"].tolist()
-    logging.info(f"Found {len(game_id_list):,} games.")
+    logging.info(f"Found {len(game_id_list):,} games in rankings dump.")
 
     logging.info("Extracting game data from BGG API...")
     extract_game_data(game_ids=game_id_list, destination_dir=xml_dir)

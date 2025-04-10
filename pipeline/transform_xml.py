@@ -16,52 +16,63 @@ def parse_description(desc: str) -> str:
     return desc.strip()
 
 
-def parse_bgg_xml_to_dict(item: Element) -> dict[str, Any]:
+def parse_bgg_xml_to_dict(xml_element: Element) -> dict[str, Any]:
     """
-    Parse BoardGameGeek XML data and yield each game as a dictionary.
+    Parse BoardGameGeek XML data and return a dictionary of DataFrames.
 
-    :param item: BoardGameGeek XML data as string
+    :param xml_element: BoardGameGeek XML data
 
     :return dict[str, Any]: XML game data as dictionary
     """
-
-    item_ratings = item.find("statistics/ratings")
-    game_id = item.get("id")
-
-    if item is None or item_ratings is None or game_id is None:
+    if xml_element is None:
         return {}
 
-    return {
-        "game": {
-            "game_id": game_id,
-            "title": item.find("name[@type='primary']").get("value"),
-            "description": parse_description(item.findtext("description", default="")),
-            "year_published": item.find("yearpublished").get("value"),
-            "min_players": item.find("minplayers").get("value"),
-            "max_players": item.find("maxplayers").get("value"),
-            "playing_time": item.find("playingtime").get("value"),
-            "min_playtime": item.find("minplaytime").get("value"),
-            "max_playtime": item.find("maxplaytime").get("value"),
-            "min_age": item.find("minage").get("value"),
-            "total_ratings": item_ratings.find("usersrated").get("value"),
-            "avg_rating": item_ratings.find("average").get("value"),
-            "bayes_rating": item_ratings.find("bayesaverage").get("value"),
-            "std_dev_ratings": item_ratings.find("stddev").get("value"),
-            "owned_copies": item_ratings.find("owned").get("value"),
-            "wishlist": item_ratings.find("wishing").get("value"),
-            "total_weights": item_ratings.find("numweights").get("value"),
-            "average_weight": item_ratings.find("averageweight").get("value"),
-        },
-        "links": [
-            {
-                "game_id": game_id,
-                "link_type": link.get("type", default="").removeprefix("boardgame"),
-                "link_id": link.get("id"),
-                "link_name": link.get("value"),
-            }
-            for link in item.findall("link")
-        ],
+    game_type = xml_element.findtext("type", default="")
+    if game_type != "boardgame":
+        return {}
+
+    game_id = xml_element.get("id")
+    if game_id is None:
+        return {}
+
+    ratings_element = xml_element.find("statistics/ratings")
+    if ratings_element is None:
+        return {}
+
+    game_data = {
+        "game_id": game_id,
+        "title": xml_element.find("name[@type='primary']").get("value"),
+        "description": parse_description(
+            xml_element.findtext("description", default="")
+        ),
+        "year_published": xml_element.find("yearpublished").get("value"),
+        "min_players": xml_element.find("minplayers").get("value"),
+        "max_players": xml_element.find("maxplayers").get("value"),
+        "playing_time": xml_element.find("playingtime").get("value"),
+        "min_playtime": xml_element.find("minplaytime").get("value"),
+        "max_playtime": xml_element.find("maxplaytime").get("value"),
+        "min_age": xml_element.find("minage").get("value"),
+        "total_ratings": ratings_element.find("usersrated").get("value"),
+        "avg_rating": ratings_element.find("average").get("value"),
+        "bayes_rating": ratings_element.find("bayesaverage").get("value"),
+        "std_dev_ratings": ratings_element.find("stddev").get("value"),
+        "owned_copies": ratings_element.find("owned").get("value"),
+        "wishlist": ratings_element.find("wishing").get("value"),
+        "total_weights": ratings_element.find("numweights").get("value"),
+        "average_weight": ratings_element.find("averageweight").get("value"),
     }
+
+    links_data = [
+        {
+            "game_id": game_id,
+            "link_type": link.get("type", default="").removeprefix("boardgame"),
+            "link_id": link.get("id"),
+            "link_name": link.get("value"),
+        }
+        for link in xml_element.findall("link")
+    ]
+
+    return {"game": game_data, "links": links_data}
 
 
 def separate_link_types(links_df: pandas.DataFrame) -> dict[str, pandas.DataFrame]:
@@ -124,3 +135,7 @@ def save_processed_data(destination_dir: Path, **kwargs: pandas.DataFrame) -> No
     destination_dir.mkdir(parents=True, exist_ok=True)
     for filename, df in kwargs.items():
         df.to_csv(path_or_buf=destination_dir / f"{filename}.csv", index=False)
+
+
+if __name__ == "__main__":
+    transform_xml_files(Path("./data"))

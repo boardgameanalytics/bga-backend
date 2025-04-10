@@ -1,5 +1,5 @@
-init:
-	poetry install --with web,pipeline,dev
+poetry-init:
+	poetry install --with all
 
 lint:
 	black . --check
@@ -18,13 +18,7 @@ build-pipeline:
 	docker build -f docker/pipeline.Dockerfile --tag bga-pipeline-job
 
 run-pipeline-job:
-	docker run --env-file=.env --volume=${PWD}/data:/data --name=bga-pipeline-job bga-pipeline-job
+	docker compose run pipeline_job && docker compose logs pipeline_job
 
-docker-up:
-	docker compose -f compose.yaml up -d
-
-docker-all-logs:
-	docker compose logs
-
-docker-down:
-	docker compose down
+run-web-stack:
+	docker compose up web db -d
