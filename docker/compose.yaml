@@ -5,7 +5,8 @@ x-shared-env: &shared-env
 services:
   web:
     build:
-      dockerfile: ./docker/web.Dockerfile
+      context: ../
+      dockerfile: docker/web.Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -33,7 +34,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./src/db/init:/docker-entrypoint-initdb.d
+      - ../src/db/init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
     secrets:
       - postgres_password
@@ -43,7 +44,8 @@ services:
       - web_network
   pipeline_job:
     build:
-      dockerfile: ./docker/pipeline.Dockerfile
+      context: ../
+      dockerfile: docker/pipeline.Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -72,15 +74,15 @@ volumes:
 
 secrets:
   postgres_password:
-    file: docker/secrets/postgres_password.txt
+    file: ./secrets/postgres_password.txt
   bga_user_password:
-    file: docker/secrets/bga_user_password.txt
+    file: ./secrets/bga_user_password.txt
   bga_pipeline_password:
-    file: docker/secrets/bga_pipeline_password.txt
+    file: ./secrets/bga_pipeline_password.txt
   bgg_username:
-    file: docker/secrets/bgg_username.txt
+    file: ./secrets/bgg_username.txt
   bgg_password:
-    file: docker/secrets/bgg_password.txt
+    file: ./secrets/bgg_password.txt
 
 networks:
   web_network:

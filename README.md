@@ -33,34 +33,23 @@ Once the secrets and `.env` file are ready, the stack is ready to be spun up.
 
 #### Running
 
-Use `docker compose` to build and run the stack. One of the containers is the `pipeline_job`, which will populate the
-database and then exit on completion.
-```bash
-docker compose up -d
-```
-
-You can follow the logs for the job as well:
-```bash
-docker compose logs pipeline_job
-```
-
-You can safely shut down the stack with:
+Make commands have been created for most interactions:
 
 ```bash
-docker compose down
+make run-pipeline-job # Run only the pipeline container. Requires rest of stack to be up already
+
+make run-web-stack  # Run the stack without starting a data pipeline job
+
+make run-full-stack  # Run the full Docker compose stack
+
+make stop-stack  # Stop the Docker compose stack
+
+make stack-logs  # Follow the Docker compose logs
 ```
 
-If you want to start the stack without running the `pipeline_job`, you can do so using
+Alternatively, you can use `docker compose -f docker/compose.yaml` to directly interact with the docker stack. 
 
-```bash
-docker compose up web db -d
-```
 
 ### Development
 
-To run locally, install the virtual environment using `poetry`. Dependencies are defined in optional groups for each
-Docker image.
-
-```bash
-poetry install --with web,pipeline,dev
-```
+To run locally, install the virtual environment using `poetry install`.
