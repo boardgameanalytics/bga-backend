@@ -9,8 +9,6 @@ from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, scoped_session, Session
 from sqlalchemy.ext.declarative import declarative_base
 
-from app import config  # type: ignore
-
 # Create base class for declarative models
 Base = declarative_base()
 
@@ -74,10 +72,3 @@ class DatabaseSession:
         """
         with contextlib.suppress(Exception):
             self.close()
-
-
-# Create a default instance for easy import
-db = DatabaseSession(connection_string=config.db_url)
-
-# Example usage:
-# from db_session import db

@@ -1,6 +1,5 @@
 from unittest.mock import ANY
 
-import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
