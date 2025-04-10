@@ -2,10 +2,10 @@ import logging
 
 import pandas
 
-from pipeline import config
-from pipeline.extract import download_latest_rankings_dump, extract_game_data
-from pipeline.load import load_csv_files_into_db
-from pipeline.transform_xml import save_processed_data, transform_xml_files
+from src.pipeline import config
+from src.pipeline.extract import download_latest_rankings_dump, extract_game_data
+from src.pipeline.load import load_csv_files_into_db
+from src.pipeline.transform_xml import save_processed_data, transform_xml_files
 
 if __name__ == "__main__":
     logging.info("--Starting job--")

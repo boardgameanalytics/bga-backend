@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas
 from sqlalchemy import create_engine
 
-from pipeline import config
+from src.pipeline import config
 
 
 def load_csv_files_into_db(csv_base_dir: Path) -> None:
