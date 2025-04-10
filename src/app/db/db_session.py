@@ -6,8 +6,7 @@ for the boardgame analytics database.
 import contextlib
 
 from sqlalchemy import Engine, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, scoped_session, sessionmaker
+from sqlalchemy.orm import Session, declarative_base, scoped_session, sessionmaker
 
 # Create base class for declarative models
 Base = declarative_base()

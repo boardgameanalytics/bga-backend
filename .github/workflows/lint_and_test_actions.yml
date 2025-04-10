@@ -44,5 +44,4 @@ jobs:
           poetry config virtualenvs.create false
           poetry install --no-interaction --no-ansi
       - name: Test with pytest
-        working-directory: ${{ github.workspace }}
         run: pytest
