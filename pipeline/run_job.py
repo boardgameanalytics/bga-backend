@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     if config.top_k_only > 0:
         logging.info(f"Limiting extraction to the top {config.top_k_only} games.")
-        game_id_list = game_id_list[:config.top_k_only]
+        game_id_list = game_id_list[: config.top_k_only]
 
     logging.info("Extracting game data from BGG API...")
     extract_game_data(game_ids=game_id_list, destination_dir=xml_dir)
