@@ -1,2 +1,1 @@
-CREATE
-DATABASE boardgameanalytics_db;
+CREATE DATABASE boardgameanalytics_db;

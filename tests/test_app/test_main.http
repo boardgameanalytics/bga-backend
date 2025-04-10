@@ -9,3 +9,6 @@ GET http://127.0.0.1:80/hello/User
 Accept: application/json
 
 ###
+
+GET http://127.0.0.1:80/games
+Accept: application/json

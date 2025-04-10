@@ -592,7 +592,7 @@ class TestSaveProcessedData:
         [
             (123, {"df1": DataFrame({"col1": [1]})}, TypeError),
             # type: ignore[arg-type] # error_invalid_destination_type
-            (Path("./invalid/path"), {"df1": 123}, AttributeError),
+            (Path("."), {"df1": 123}, AttributeError),
             # type: ignore[dict-item] # error_invalid_dataframe_type
         ],
         ids=["error_invalid_destination_type", "error_invalid_dataframe_type"],

@@ -16,6 +16,7 @@ exclude = ["docker/", "data/", "tests/"]
 [tool.poetry.dependencies]
 python = "^3.10"
 sqlalchemy = "^2.0.40"
+psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.web.dependencies]
 fastapi = { extras = ["standard"], version = "^0.115.12" }
@@ -25,7 +26,6 @@ uvicorn = "^0.34.0"
 requests = "^2.32.3"
 pandas = "^2.2.3"
 python-dotenv = "*"
-psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
