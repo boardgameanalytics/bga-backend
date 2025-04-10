@@ -1,18 +1,70 @@
-# Board Game Analytics Backend
+# BoardGameAnalytics Backend & Data Engineering Stack
 
 ## Overview
 
-Description of repository
+This repository holds the backend and data engineering code for the BoardGameAnalytics stack. It uses Docker containers
+to host the web backend, Postgres database, and data pipeline.
 
-### Instances
+## Dependencies
 
-- App (API)
-- ETL Pipeline
-- DB
+- `python-3.10`
+- `poetry`
+- `docker`
 
-## Set Up
+## Instructions
 
-...
+Before running, a `.env` file needs to be created and stored in the root of the directory.
+
+The following template should be used and completely filled out:
+
+```
+# Login credentials for boardgamegeek.com
+BGG_USERNAME=
+BGG_PASSWORD=
+
+# Login credentials for the data pipeline to use
+DB_USER=bga_pipeline
+DB_PASSWORD=
+DB_HOST=localhost
+DB_NAME=boardgameanalytics_db
+
+# Path to use within Docker instance to store intermediate data for pipeline
+DATA_PATH=/data
+```
+
+### Docker
+
+Docker will expect to find secrets in `docker/secrets/`.
+
+Save the password for each Postgres user (bga_pipeline, bga_user, and postgres) to the like-named file:
+
+- `bga_pipeline_password.txt`
+- `bga_user_password.txt`
+- `postgres_password.txt`
+
+Once the secrets and `.env` file are in ready, the stack is ready to be spun up.
+
+Use `docker compose` to build and run the stack. One of the instances is the `pipeline_job`, which will populate the
+database and then exit on completion.
+
+```bash
+docker compose up -d
+```
+
+You can follow the logs for the job as well:
+
+```bash
+docker compose logs pipeline_job
+```
+
+### Development
+
+To run locally, install the virtual environment using `poetry`. Dependencies are defined in optional groups for each
+Docker image.
+
+```bash
+poetry install --with all
+```
 
 ## Testing
 

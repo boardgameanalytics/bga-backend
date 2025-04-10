@@ -1,6 +1,3 @@
-poetry-init:
-	poetry install --with all
-
 lint:
 	black . --check
 	isort . --profile=black --check
