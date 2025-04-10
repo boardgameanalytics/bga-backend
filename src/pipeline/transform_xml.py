@@ -1,4 +1,3 @@
-# mypy: disable-error-code="union-attr"
 import logging
 import re
 from pathlib import Path
@@ -7,6 +6,19 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
 import pandas
+
+
+def find_and_get_value(element: Element, key: str) -> Any:
+    """
+    Find the value of a given key in the given element.
+
+    :param element: Element to search in.
+    :param key: Key to look for.
+
+    :return Any: Value of the given key.
+    """
+    if sub_element := element.find(key):
+        return sub_element.get("value")
 
 
 def parse_description(desc: str) -> str:
@@ -41,25 +53,25 @@ def parse_bgg_xml_to_dict(xml_element: Element) -> dict[str, Any]:
 
     game_data = {
         "game_id": game_id,
-        "title": xml_element.find("name[@type='primary']").get("value"),
+        "title": find_and_get_value(xml_element, "name[@type='primary']"),
         "description": parse_description(
             xml_element.findtext("description", default="")
         ),
-        "year_published": xml_element.find("yearpublished").get("value"),
-        "min_players": xml_element.find("minplayers").get("value"),
-        "max_players": xml_element.find("maxplayers").get("value"),
-        "playing_time": xml_element.find("playingtime").get("value"),
-        "min_playtime": xml_element.find("minplaytime").get("value"),
-        "max_playtime": xml_element.find("maxplaytime").get("value"),
-        "min_age": xml_element.find("minage").get("value"),
-        "total_ratings": ratings_element.find("usersrated").get("value"),
-        "avg_rating": ratings_element.find("average").get("value"),
-        "bayes_rating": ratings_element.find("bayesaverage").get("value"),
-        "std_dev_ratings": ratings_element.find("stddev").get("value"),
-        "owned_copies": ratings_element.find("owned").get("value"),
-        "wishlist": ratings_element.find("wishing").get("value"),
-        "total_weights": ratings_element.find("numweights").get("value"),
-        "average_weight": ratings_element.find("averageweight").get("value"),
+        "year_published": find_and_get_value(xml_element, "yearpublished"),
+        "min_players": find_and_get_value(xml_element, "minplayers"),
+        "max_players": find_and_get_value(xml_element, "maxplayers"),
+        "playing_time": find_and_get_value(xml_element, "playingtime"),
+        "min_playtime": find_and_get_value(xml_element, "minplaytime"),
+        "max_playtime": find_and_get_value(xml_element, "maxplaytime"),
+        "min_age": find_and_get_value(xml_element, "minage"),
+        "total_ratings": find_and_get_value(ratings_element, "usersrated"),
+        "avg_rating": find_and_get_value(ratings_element, "average"),
+        "bayes_rating": find_and_get_value(ratings_element, "bayesaverage"),
+        "std_dev_ratings": find_and_get_value(ratings_element, "stddev"),
+        "owned_copies": find_and_get_value(ratings_element, "owned"),
+        "wishlist": find_and_get_value(ratings_element, "wishing"),
+        "total_weights": find_and_get_value(ratings_element, "numweights"),
+        "average_weight": find_and_get_value(ratings_element, "averageweight"),
     }
 
     links_data = [
