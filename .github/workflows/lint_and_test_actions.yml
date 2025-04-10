@@ -46,8 +46,4 @@ jobs:
 
       - name: Test with pytest
         run: |
-          echo $PYTHONPATH
-          ls -la
-          pytest
-        env:
-          PYTHONPATH: src
+          PYTHONPATH=$GITHUB_WORKSPACE/src pytest
