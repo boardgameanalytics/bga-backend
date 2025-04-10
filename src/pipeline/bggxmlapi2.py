@@ -1,5 +1,5 @@
+import logging
 from collections.abc import Generator
-from math import ceil
 
 from requests import get
 
@@ -23,7 +23,7 @@ class BggXmlApi2:
     @staticmethod
     def _segment_list(
         item_list: list, batch_size: int = 20
-    ) -> Generator[list[str], None, None]:
+    ) -> Generator[list, None, None]:
         """
         Segment list of items into batches.
 
@@ -32,7 +32,11 @@ class BggXmlApi2:
 
         :return Generator[str]: Yields list of segmented items
         """
-        total_batches = ceil(len(item_list) // batch_size) + 1
+        if batch_size < 1:
+            raise ValueError("batch_size must be greater than 1")
+
+        total_batches = (len(item_list) + batch_size - 1) // batch_size
+        logging.info(f"Total batches: {total_batches}")
         for batch_num in range(total_batches):
             begin = batch_num * batch_size
             end = min(begin + batch_size, len(item_list))

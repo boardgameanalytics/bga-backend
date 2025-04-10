@@ -10,6 +10,9 @@ readme = "README.md"
 [tool.poetry]
 package-mode = false
 
+[tool.mypy]
+exclude = ["docker/", "data/", "tests/"]
+
 [tool.poetry.dependencies]
 python = "^3.10"
 sqlalchemy = "^2.0.40"
@@ -22,9 +25,11 @@ uvicorn = "^0.34.0"
 requests = "^2.32.3"
 pandas = "^2.2.3"
 python-dotenv = "*"
+psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
+pytest-mock = "^3.14.0"
 flake8 = "*"
 black = "*"
 mypy = "*"

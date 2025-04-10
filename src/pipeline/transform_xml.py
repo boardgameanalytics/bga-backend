@@ -1,3 +1,4 @@
+import html
 import logging
 import re
 from pathlib import Path
@@ -5,7 +6,7 @@ from typing import Any
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
-import pandas
+from pandas import DataFrame
 
 
 def find_and_get_value(element: Element, key: str) -> Any:
@@ -17,15 +18,22 @@ def find_and_get_value(element: Element, key: str) -> Any:
 
     :return Any: Value of the given key.
     """
-    if sub_element := element.find(key):
+    if element is None:
+        return None
+
+    sub_element = element.find(key)
+    if sub_element is not None:
         return sub_element.get("value")
 
 
 def parse_description(desc: str) -> str:
     """Parse a description and replace escaped characters"""
-    desc = re.sub(r"&rsquo;", "'", desc)
-    desc = re.sub(r"&#.{,5};| {2,}", " ", desc)
-    return desc.strip()
+    if desc:
+        desc = html.unescape(desc).replace("’", "'")
+        desc = re.sub(r" {2,}", " ", desc)
+        return desc.strip()
+    else:
+        return ""
 
 
 def parse_bgg_xml_to_dict(xml_element: Element) -> dict[str, Any]:
@@ -36,10 +44,10 @@ def parse_bgg_xml_to_dict(xml_element: Element) -> dict[str, Any]:
 
     :return dict[str, Any]: XML game data as dictionary
     """
-    if xml_element is None:
-        return {}
+    if not isinstance(xml_element, Element):
+        raise TypeError(f"Expected XML element, got {type(xml_element)}")
 
-    game_type = xml_element.findtext("type", default="")
+    game_type = xml_element.get("type", default="")
     if game_type != "boardgame":
         return {}
 
@@ -87,16 +95,23 @@ def parse_bgg_xml_to_dict(xml_element: Element) -> dict[str, Any]:
     return {"game": game_data, "links": links_data}
 
 
-def separate_link_types(links_df: pandas.DataFrame) -> dict[str, pandas.DataFrame]:
+def separate_link_types(links_df: DataFrame) -> dict[str, DataFrame]:
     """
     Separate links DataFrame into separate dataframes for each link type.
 
     :param links_df: Links DataFrame
 
-    :return dict[str, pandas.DataFrame]: Dictionary of link type DataFrames.
+    :return dict[str, DataFrame]: Dictionary of link type DataFrames.
     """
-    transformed_data = {}
-    for name, df in links_df.drop_duplicates().groupby("link_type"):
+    if not isinstance(links_df, DataFrame):
+        raise TypeError(f"Expected DataFrame, got {type(links_df)}")
+
+    transformed_data: dict = {}
+
+    if links_df.empty:
+        return transformed_data
+
+    for name, df in links_df.drop_duplicates().groupby(by="link_type"):
         group_df = df.drop(columns="link_type").reset_index(drop=True)
 
         transformed_data[f"links/{name}_link"] = group_df.drop(
@@ -109,14 +124,17 @@ def separate_link_types(links_df: pandas.DataFrame) -> dict[str, pandas.DataFram
     return transformed_data
 
 
-def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
+def transform_xml_files(xml_dir: Path) -> dict[str, DataFrame]:
     """
     Transform XML game data to Pandas DataFrames
 
     :param xml_dir: Directory containing XML game data
 
-    :return dict[str, pandas.DataFrame]: Dictionary of each separate dataset as a Pandas DataFrame
+    :return dict[str, DataFrame]: Dictionary of each separate dataset as a Pandas DataFrame
     """
+    if not isinstance(xml_dir, Path):
+        raise TypeError(f"Expected Path, got {type(xml_dir)}")
+
     all_games = []
     all_links = []
 
@@ -131,21 +149,28 @@ def transform_xml_files(xml_dir: Path) -> dict[str, pandas.DataFrame]:
             logging.error(f"Failed to parse {xml_file}: {e}")
             continue
 
-    transformed_data = separate_link_types(pandas.DataFrame.from_records(all_links))
-    transformed_data["details/game_details"] = pandas.DataFrame.from_records(all_games)
+    transformed_data = separate_link_types(DataFrame.from_records(all_links))
+    game_details_df = DataFrame.from_records(all_games)
+    if not game_details_df.empty:
+        transformed_data["details/game_details"] = game_details_df
 
     return transformed_data
 
 
-def save_processed_data(destination_dir: Path, **kwargs: pandas.DataFrame) -> None:
+def save_processed_data(destination_dir: Path, **kwargs: DataFrame) -> None:
     """
     Save processed data to disk
 
     :param destination_dir: Directory to save processed data to
     :param kwargs: Pandas DataFrame arguments assigned to their name as the key
     """
+    if not isinstance(destination_dir, Path):
+        raise TypeError(f"Expected Path, got {type(destination_dir)}")
+
     destination_dir.mkdir(parents=True, exist_ok=True)
     for filename, df in kwargs.items():
+        if not isinstance(df, DataFrame):
+            raise AttributeError(f"Expected DataFrame, got {type(df)}")
         df.to_csv(path_or_buf=destination_dir / f"{filename}.csv", index=False)
 
 

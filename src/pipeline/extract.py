@@ -1,5 +1,6 @@
 import html.parser
 import zipfile
+from http.client import HTTPException
 from io import BytesIO
 from pathlib import Path
 from time import sleep
@@ -24,7 +25,7 @@ def get_authenticated_session() -> requests.Session:
     )
     if res.status_code == 204:
         return session
-    raise Exception(
+    raise HTTPException(
         f"Authentication unsuccessful. Status code {res.status_code} returned."
     )
 
@@ -67,6 +68,9 @@ def download_latest_rankings_dump(output_file_path: Path) -> Path:
     parser = S3LinkParser()
     parser.feed(bg_ranks_page.text)
     download_url = parser.download_link
+
+    if download_url is None:
+        raise Exception("No download link found.")
 
     # Download and save to destination_path
     zip_buffer = requests.get(download_url)
