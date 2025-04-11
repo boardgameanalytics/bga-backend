@@ -42,7 +42,7 @@ services:
       - bga_pipeline_password
     networks:
       - web_network
-  pipeline_job:
+  pipeline-job:
     build:
       context: ../
       dockerfile: docker/pipeline.Dockerfile
@@ -54,7 +54,7 @@ services:
       BGG_PASSWORD_FILE: /run/secrets/bgg_password
       DB_USER: bga_pipeline
       DB_PASSWORD_FILE: /run/secrets/bga_pipeline_password
-      TOP_K_ONLY: 1000
+      TOP_K_ONLY: 20  # Limit the game data fetched to the Top K games in the rankings dump
       <<: *shared-env
     secrets:
       - bga_pipeline_password
