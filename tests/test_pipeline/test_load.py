@@ -65,7 +65,7 @@ class TestLoadCsvFilesIntoDb:
                 mocker.call(
                     name=filename,
                     con=mock_engine,
-                    if_exists="replace",
+                    if_exists="append",
                     index=False,
                 )
                 for filename, df in files

@@ -26,7 +26,7 @@ def load_csv_files_into_db(csv_base_dir: Path) -> None:
         table_name = csv_file.stem
         logging.info(f"Loading {csv_file.name} into table {table_name}...")
         try:
-            table_df = pandas.read_csv(csv_file)
+            table_df = pandas.read_csv(csv_file).drop_duplicates()
             table_df.to_sql(
                 name=table_name, con=engine, if_exists="append", index=False
             )
