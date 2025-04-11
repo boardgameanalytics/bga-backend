@@ -12,7 +12,7 @@ from src.pipeline.transform_xml import (
     find_and_get_value,
     parse_bgg_xml_to_dict,
     parse_description,
-    save_processed_data,
+    save_df_to_csv,
     separate_link_types,
     transform_xml_files,
 )
@@ -536,7 +536,7 @@ class TestTransformXmlFiles:
             transform_xml_files(xml_dir)
 
 
-class TestSaveProcessedData:
+class TestSaveDfToCsv:
     @pytest.mark.parametrize(
         "dataframes",
         [
@@ -551,14 +551,14 @@ class TestSaveProcessedData:
         ],
         ids=["happy_path_multiple_dataframes", "happy_path_single_dataframe"],
     )
-    def test_save_processed_data_happy_path(
+    def test_save_df_to_csv_happy_path(
         self, dataframes: dict[str, DataFrame], tmp_path: Path
     ):
         # Arrange
         destination_dir = tmp_path / "data"
 
         # Act
-        save_processed_data(destination_dir, **dataframes)
+        save_df_to_csv(destination_dir, **dataframes)
 
         # Assert
         assert destination_dir.exists()
@@ -575,14 +575,14 @@ class TestSaveProcessedData:
         ],
         ids=["edge_case_no_dataframes"],
     )
-    def test_save_processed_data_edge_cases(
+    def test_save_df_to_csv_edge_cases(
         self, dataframes: dict[str, DataFrame], tmp_path: Path
     ):
         # Arrange
         destination_dir = tmp_path / "data"
 
         # Act
-        save_processed_data(destination_dir, **dataframes)
+        save_df_to_csv(destination_dir, **dataframes)
 
         # Assert
         assert destination_dir.exists()
@@ -597,7 +597,7 @@ class TestSaveProcessedData:
         ],
         ids=["error_invalid_destination_type", "error_invalid_dataframe_type"],
     )
-    def test_save_processed_data_error_cases(
+    def test_save_df_to_csv_error_cases(
         self,
         destination_dir: Path | Any,
         dataframes: dict[str, DataFrame | Any],
@@ -605,4 +605,4 @@ class TestSaveProcessedData:
     ):
         # Act & Assert
         with pytest.raises(expected_exception):
-            save_processed_data(destination_dir, **dataframes)
+            save_df_to_csv(destination_dir, **dataframes)

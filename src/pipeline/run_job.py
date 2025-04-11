@@ -9,7 +9,7 @@ from pipeline.extract import (  # type: ignore
 )
 from pipeline.load import load_csv_files_into_db  # type: ignore
 from pipeline.transform_xml import (  # type: ignore
-    save_processed_data,
+    save_df_to_csv,
     transform_xml_files,
 )
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     logging.info("Transforming...")
     processed_dfs = transform_xml_files(xml_dir)
-    save_processed_data(destination_dir=csv_dir, **processed_dfs)
+    save_df_to_csv(destination_dir=csv_dir, **processed_dfs)
 
     logging.info("Loading...")
     load_csv_files_into_db(csv_dir)

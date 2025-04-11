@@ -157,7 +157,7 @@ def transform_xml_files(xml_dir: Path) -> dict[str, DataFrame]:
     return transformed_data
 
 
-def save_processed_data(destination_dir: Path, **kwargs: DataFrame) -> None:
+def save_df_to_csv(destination_dir: Path, **kwargs: DataFrame) -> None:
     """
     Save processed data to disk
 
@@ -171,7 +171,9 @@ def save_processed_data(destination_dir: Path, **kwargs: DataFrame) -> None:
     for filename, df in kwargs.items():
         if not isinstance(df, DataFrame):
             raise AttributeError(f"Expected DataFrame, got {type(df)}")
-        df.to_csv(path_or_buf=destination_dir / f"{filename}.csv", index=False)
+        filepath = destination_dir / f"{filename}.csv"
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(path_or_buf=filepath, index=False)
 
 
 if __name__ == "__main__":
