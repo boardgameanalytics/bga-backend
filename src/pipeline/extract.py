@@ -1,4 +1,5 @@
 import html.parser
+import logging
 import zipfile
 from http.client import HTTPException
 from io import BytesIO
@@ -9,6 +10,8 @@ import requests
 
 from common import config  # type: ignore
 from pipeline.bggxmlapi2 import BggXmlApi2  # type: ignore
+
+logging.basicConfig(level=logging.INFO)
 
 
 def get_authenticated_session() -> requests.Session:
@@ -95,4 +98,5 @@ def extract_game_data(game_ids: list[str], destination_dir: Path) -> None:
         file_path = destination_dir / f"{str(num).zfill(4)}.xml"
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(xml)
+            logging.info(f"Extracted {file_path}")
         sleep(5)

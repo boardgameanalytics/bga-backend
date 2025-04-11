@@ -28,7 +28,7 @@ def load_csv_files_into_db(csv_base_dir: Path) -> None:
         try:
             table_df = pandas.read_csv(csv_file)
             table_df.to_sql(
-                name=table_name, con=engine, if_exists="replace", index=False
+                name=table_name, con=engine, if_exists="append", index=False
             )
         except Exception as e:
             logging.error(f"Error loading {csv_file.name}: {e}")
