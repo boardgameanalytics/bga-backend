@@ -8,4 +8,4 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 
 COPY ../src/pipeline ./pipeline
 
-CMD ["python", "run_job.py"]
+CMD ["python", "-m", "pipeline.run_job"]

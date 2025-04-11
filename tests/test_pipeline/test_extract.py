@@ -240,8 +240,8 @@ class TestExtractGameData:
     ):
         # Arrange
         destination_dir = tmp_path / "game_data"
-        mocker.patch(
-            "src.pipeline.bggxmlapi2.BggXmlApi2.bulk_query_things",
+        mock_bulk_query_things = mocker.patch(
+            "src.pipeline.extract.BggXmlApi2.bulk_query_things",
             return_value=mock_xml_responses,
         )
         mock_sleep = mocker.patch("src.pipeline.extract.sleep")
@@ -250,7 +250,7 @@ class TestExtractGameData:
         extract_game_data(game_ids, destination_dir)
 
         # Assert
-        BggXmlApi2.bulk_query_things.assert_called_once_with(game_ids)  # type: ignore
+        mock_bulk_query_things.assert_called_once_with(game_ids)  # type: ignore
         mock_sleep.assert_called_with(5)
         assert destination_dir.exists()
         for i, xml in enumerate(mock_xml_responses):
@@ -264,13 +264,13 @@ class TestExtractGameData:
     ):
         # Arrange
         destination_dir = tmp_path / "game_data"
-        mocker.patch(
-            "src.pipeline.bggxmlapi2.BggXmlApi2.bulk_query_things", return_value=[]
+        mock_bulk_query_things = mocker.patch(
+            "src.pipeline.extract.BggXmlApi2.bulk_query_things", return_value=[]
         )
 
         # Act
         extract_game_data([], destination_dir)
 
         # Assert
-        BggXmlApi2.bulk_query_things.assert_called_once_with([])  # type: ignore
+        mock_bulk_query_things.assert_called_once_with([])  # type: ignore
         assert destination_dir.exists()
