@@ -68,5 +68,12 @@ class BggXmlApi2:
 
         :return Generator[str]: Yields batches of items
         """
-        for batch in cls._segment_list(thing_ids):
+        try:
+            string_ids = [str(thing_id) for thing_id in thing_ids]
+        except TypeError as e:
+            raise TypeError(
+                "thing_ids must be a list of strings or string-castable values"
+            ) from e
+
+        for batch in cls._segment_list(string_ids):
             yield cls.query_thing(thing_id=",".join(batch))

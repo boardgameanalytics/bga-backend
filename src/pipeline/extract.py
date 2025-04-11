@@ -7,8 +7,8 @@ from time import sleep
 
 import requests
 
-from pipeline import config
-from pipeline.bggxmlapi2 import BggXmlApi2
+from common import config  # type: ignore
+from pipeline.bggxmlapi2 import BggXmlApi2  # type: ignore
 
 
 def get_authenticated_session() -> requests.Session:

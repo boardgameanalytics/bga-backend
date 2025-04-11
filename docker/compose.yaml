@@ -50,10 +50,11 @@ services:
       db:
         condition: service_healthy
     environment:
-      BGG_USERNAME: /run/secrets/bgg_username
-      BGG_PASSWORD: /run/secrets/bgg_password
+      BGG_USERNAME_FILE: /run/secrets/bgg_username
+      BGG_PASSWORD_FILE: /run/secrets/bgg_password
       DB_USER: bga_pipeline
       DB_PASSWORD_FILE: /run/secrets/bga_pipeline_password
+      TOP_K_ONLY: 1000
       <<: *shared-env
     secrets:
       - bga_pipeline_password

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 import app.db.models as models  # type: ignore
-from app import config
 from app.db.db_session import DatabaseSession  # type: ignore
+from common import config  # type: ignore
 
 app = FastAPI()
 

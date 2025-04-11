@@ -6,8 +6,7 @@ import pytest
 from pytest_mock import MockerFixture
 from requests import Response, Session
 
-from src.pipeline import config
-from src.pipeline.bggxmlapi2 import BggXmlApi2
+from src.common import config
 from src.pipeline.extract import (
     S3LinkParser,
     download_latest_rankings_dump,

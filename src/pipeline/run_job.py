@@ -2,12 +2,19 @@ import logging
 
 import pandas
 
-from pipeline import config
-from pipeline.extract import download_latest_rankings_dump, extract_game_data
-from pipeline.load import load_csv_files_into_db
-from pipeline.transform_xml import save_processed_data, transform_xml_files
+from common import config  # type: ignore
+from pipeline.extract import (  # type: ignore
+    download_latest_rankings_dump,
+    extract_game_data,
+)
+from pipeline.load import load_csv_files_into_db  # type: ignore
+from pipeline.transform_xml import (  # type: ignore
+    save_processed_data,
+    transform_xml_files,
+)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     logging.info("--Starting job--")
 
     rankings_csv_path = config.data_path / "rankings_dumps"
@@ -21,7 +28,7 @@ if __name__ == "__main__":
     )["id"].tolist()
     logging.info(f"Found {len(game_id_list):,} games in rankings dump.")
 
-    if config.top_k_only > 0:
+    if config.top_k_only:
         logging.info(f"Limiting extraction to the top {config.top_k_only} games.")
         game_id_list = game_id_list[: config.top_k_only]
 

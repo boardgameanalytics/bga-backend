@@ -14,19 +14,20 @@ build-web:  # Build backend web app image
 build-pipeline:  # Build pipeline job image
 	docker build -f docker/pipeline.Dockerfile --tag bga-pipeline-job .
 
-run-pipeline-job: # Run only the pipeline container. Requires rest of stack to be up already
-	docker compose -f docker/compose.yaml --project-name bga-backend run pipeline_job && \
- 	docker compose -f docker/compose.yaml --project-name bga-backend logs pipeline_job -f
+stack-pipeline-only: # Run only the pipeline container. Requires rest of stack to be up already
+	docker compose -f docker/compose.yaml --project-name bga-backend run pipeline_job
 
-run-web-stack:  # Run the stack without starting a data pipeline job
+stack-web-only:  # Run the stack without starting a data pipeline job
 	docker compose -f docker/compose.yaml --project-name bga-backend up web db -d
 
-run-full-stack:  # Run the full Docker compose stack
-	docker compose -f docker/compose.yaml --project-name bga-backend up -d \
-	&& docker compose -f docker/compose.yaml --project-name bga-backend logs pipeline_job -f
+stack-up:  # Run the full Docker compose stack
+	docker compose -f docker/compose.yaml --project-name bga-backend up -d
 
-stop-stack:  # Stop the Docker compose stack
+stack-down:  # Destroy the Docker compose stack
 	docker compose -f docker/compose.yaml --project-name bga-backend down
 
 stack-logs:  # Follow the Docker compose logs
-	docker compose -f docker/compose.yaml --project-name bga-backend logs -f
+	docker compose -f docker/compose.yaml --project-name bga-backend logs --follow
+
+stack-logs-pipeline:  # Follow the Docker logs for the pipeline container
+	docker compose -f docker/compose.yaml --project-name bga-backend logs pipeline_job --follow

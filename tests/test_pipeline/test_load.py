@@ -7,7 +7,7 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy import create_engine
 
-from src.pipeline import config
+from src.common import config
 from src.pipeline.load import load_csv_files_into_db
 
 
