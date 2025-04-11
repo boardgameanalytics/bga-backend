@@ -4,15 +4,15 @@ from pytest_mock import MockerFixture
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
-from src.app.db.db_session import DatabaseSession
+from src.web.db.session import DatabaseSession
 
 
 class TestDatabaseSession:
     def test_init(self, mocker: MockerFixture):
         # Arrange
-        mock_create_engine = mocker.patch("src.app.db.db_session.create_engine")
-        mock_sessionmaker = mocker.patch("src.app.db.db_session.sessionmaker")
-        mock_scoped_session = mocker.patch("src.app.db.db_session.scoped_session")
+        mock_create_engine = mocker.patch("src.web.db.session.create_engine")
+        mock_sessionmaker = mocker.patch("src.web.db.session.sessionmaker")
+        mock_scoped_session = mocker.patch("src.web.db.session.scoped_session")
         connection_string = "sqlite:///test.db"
 
         # Act
@@ -31,7 +31,7 @@ class TestDatabaseSession:
         # Arrange
         connection_string = "sqlite:///test.db"
         db_session = DatabaseSession(connection_string)
-        mock_create_engine = mocker.patch("src.app.db.db_session.create_engine")
+        mock_create_engine = mocker.patch("src.web.db.session.create_engine")
 
         # Act
         db_session._create_engine()
@@ -46,10 +46,10 @@ class TestDatabaseSession:
         # Arrange
         mock_engine = mocker.MagicMock(spec=Engine)
         mock_sessionmaker = mocker.patch(
-            "src.app.db.db_session.sessionmaker", return_value="mock_sessionmaker"
+            "src.web.db.session.sessionmaker", return_value="mock_sessionmaker"
         )
         mock_scoped_session = mocker.patch(
-            "src.app.db.db_session.scoped_session", return_value="mock_scoped_session"
+            "src.web.db.session.scoped_session", return_value="mock_scoped_session"
         )
 
         # Act
@@ -77,8 +77,8 @@ class TestDatabaseSession:
         # Arrange
         connection_string = "sqlite:///test.db"
         db_session = DatabaseSession(connection_string)
-        mock_remove = mocker.patch("src.app.db.db_session.scoped_session.remove")
-        mock_dispose = mocker.patch("src.app.db.db_session.Engine.dispose")
+        mock_remove = mocker.patch("src.web.db.session.scoped_session.remove")
+        mock_dispose = mocker.patch("src.web.db.session.Engine.dispose")
 
         # Act
         db_session.close()
@@ -91,7 +91,7 @@ class TestDatabaseSession:
         # Arrange
         connection_string = "sqlite:///test.db"
         db_session = DatabaseSession(connection_string)
-        mock_close = mocker.patch("src.app.db.db_session.DatabaseSession.close")
+        mock_close = mocker.patch("src.web.db.session.DatabaseSession.close")
 
         # Act
         del db_session

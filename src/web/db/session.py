@@ -1,5 +1,5 @@
 """
-db_session.py - Module for creating a read-only SQLAlchemy session
+session.py - Module for creating a read-only SQLAlchemy session
 for the boardgame analytics database.
 """
 
