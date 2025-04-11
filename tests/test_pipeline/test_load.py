@@ -7,8 +7,8 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy import create_engine
 
-from src.common import config
-from src.pipeline.load import load_csv_files_into_db
+from services.common import config
+from services.pipeline.load import load_csv_files_into_db
 
 
 class TestLoadCsvFilesIntoDb:
@@ -52,7 +52,7 @@ class TestLoadCsvFilesIntoDb:
                 df.to_csv(csv_base_dir / subdir / f"{filename}.csv", index=False)
 
         mock_engine = mocker.MagicMock(spec=create_engine(config.db_url))
-        mocker.patch("src.pipeline.load.create_engine", return_value=mock_engine)
+        mocker.patch("services.pipeline.load.create_engine", return_value=mock_engine)
         mock_to_sql = mocker.patch("pandas.DataFrame.to_sql")
 
         # Act
@@ -114,7 +114,7 @@ class TestLoadCsvFilesIntoDb:
                 df.to_csv(csv_base_dir / subdir / f"{filename}.csv", index=False)
 
         mock_engine = mocker.MagicMock(spec=create_engine(config.db_url))
-        mocker.patch("src.pipeline.load.create_engine", return_value=mock_engine)
+        mocker.patch("services.pipeline.load.create_engine", return_value=mock_engine)
 
         # Simulate an error during DataFrame loading
         mocker.patch("pandas.read_csv", side_effect=Exception("Mock CSV read error"))

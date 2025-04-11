@@ -12,6 +12,7 @@ package-mode = false
 
 [tool.mypy]
 exclude = ["docker/", "data/", "tests/"]
+follow_imports = "skip"
 
 [tool.poetry.dependencies]
 python = "^3.10"

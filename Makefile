@@ -43,7 +43,7 @@ stack-stop:					## Stop the stack
 	${DOCKER_COMPOSE_BASE_CMD} stop
 
 .PHONY: stack-down
-stack-down:					## Destroy the stack
+stack-down:					## Destroy the stack containers, keep persistent volumes
 	${DOCKER_COMPOSE_BASE_CMD} down
 
 .PHONY: stack-logs

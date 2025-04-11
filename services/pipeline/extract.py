@@ -7,7 +7,6 @@ from pathlib import Path
 from time import sleep
 
 import requests
-
 from common import config  # type: ignore
 from pipeline.bggxmlapi2 import BggXmlApi2  # type: ignore
 

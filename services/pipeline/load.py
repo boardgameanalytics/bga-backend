@@ -3,9 +3,8 @@ from itertools import chain
 from pathlib import Path
 
 import pandas
-from sqlalchemy import create_engine
-
 from common import config  # type: ignore
+from sqlalchemy import create_engine
 
 
 def load_csv_files_into_db(csv_base_dir: Path) -> None:

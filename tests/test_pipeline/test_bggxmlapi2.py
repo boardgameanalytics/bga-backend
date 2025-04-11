@@ -2,7 +2,7 @@ import pytest
 from pytest_mock import MockerFixture
 from requests import Response
 
-from src.pipeline.bggxmlapi2 import BggXmlApi2
+from services.pipeline.bggxmlapi2 import BggXmlApi2
 
 
 class TestBuildQueryURL:
@@ -160,7 +160,7 @@ class TestQueryThing:
         mock_response.status_code = mock_status_code
         mock_response.content = mock_content
 
-        mocker.patch("src.pipeline.bggxmlapi2.get", return_value=mock_response)
+        mocker.patch("services.pipeline.bggxmlapi2.get", return_value=mock_response)
 
         # Act
         actual_xml = BggXmlApi2.query_thing(thing_id)
@@ -184,7 +184,7 @@ class TestQueryThing:
         mock_response.status_code = mock_status_code
         mock_response.content = b""
 
-        mocker.patch("src.pipeline.bggxmlapi2.get", return_value=mock_response)
+        mocker.patch("services.pipeline.bggxmlapi2.get", return_value=mock_response)
 
         # Act & Assert
         with pytest.raises(expected_exception):

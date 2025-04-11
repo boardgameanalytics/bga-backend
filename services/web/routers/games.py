@@ -1,7 +1,6 @@
-from fastapi import APIRouter
-
 import web.db.models as models  # type: ignore
 from common import config  # type: ignore
+from fastapi import APIRouter
 from web.db.session import DatabaseSession  # type: ignore
 
 router = APIRouter()

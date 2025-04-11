@@ -1,7 +1,6 @@
 import logging
 
 import pandas
-
 from common import config  # type: ignore
 from pipeline.extract import (  # type: ignore
     download_latest_rankings_dump,

@@ -34,7 +34,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ../src/db/init:/docker-entrypoint-initdb.d
+      - ../services/db/init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
     secrets:
       - postgres_password

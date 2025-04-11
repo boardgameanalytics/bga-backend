@@ -163,5 +163,5 @@ cython_debug/
 #.idea/
 
 data/
-docker/secrets/
+docker/secrets/*.txt
 

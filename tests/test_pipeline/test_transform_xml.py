@@ -8,7 +8,7 @@ from pandas import DataFrame, read_csv
 from pandas import testing as pd_testing
 from pytest_mock import MockerFixture
 
-from src.pipeline.transform_xml import (
+from services.pipeline.transform_xml import (
     find_and_get_value,
     parse_bgg_xml_to_dict,
     parse_description,
@@ -479,7 +479,7 @@ class TestTransformXmlFiles:
         for i, xml_string in enumerate(xml_files):
             (xml_dir / f"0{i}.xml").write_text(xml_string, encoding="utf-8")
 
-        mocker.patch("src.pipeline.transform_xml.logging.error")
+        mocker.patch("services.pipeline.transform_xml.logging.error")
 
         # Act
         transformed_data = transform_xml_files(xml_dir)

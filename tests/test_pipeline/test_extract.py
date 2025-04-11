@@ -6,8 +6,8 @@ import pytest
 from pytest_mock import MockerFixture
 from requests import Response, Session
 
-from src.common import config
-from src.pipeline.extract import (
+from services.common import config
+from services.pipeline.extract import (
     S3LinkParser,
     download_latest_rankings_dump,
     extract_game_data,
@@ -143,7 +143,7 @@ class TestDownloadLatestRankingsDump:
         mock_bg_ranks_page_response.text = mock_html
 
         mock_get_authenticated_session = mocker.patch(
-            "src.pipeline.extract.get_authenticated_session",
+            "services.pipeline.extract.get_authenticated_session",
             return_value=mocker.Mock(spec=Session),
         )
         mock_get_authenticated_session.return_value.get.return_value = (
@@ -200,13 +200,14 @@ class TestDownloadLatestRankingsDump:
         mock_session = mocker.Mock(spec=Session)
         mock_session.get.return_value = mock_bg_ranks_page_response
         mocker.patch(
-            "src.pipeline.extract.get_authenticated_session", return_value=mock_session
+            "services.pipeline.extract.get_authenticated_session",
+            return_value=mock_session,
         )
 
         mock_zip_response = mocker.Mock(spec=Response)
         mock_zip_response.status_code = 401  # Simulate authentication failure
         mocker.patch(
-            "src.pipeline.extract.requests.get", return_value=mock_zip_response
+            "services.pipeline.extract.requests.get", return_value=mock_zip_response
         )
 
         output_file_path = tmp_path / "bg_ranks"
@@ -240,10 +241,10 @@ class TestExtractGameData:
         # Arrange
         destination_dir = tmp_path / "game_data"
         mock_bulk_query_things = mocker.patch(
-            "src.pipeline.extract.BggXmlApi2.bulk_query_things",
+            "services.pipeline.extract.BggXmlApi2.bulk_query_things",
             return_value=mock_xml_responses,
         )
-        mock_sleep = mocker.patch("src.pipeline.extract.sleep")
+        mock_sleep = mocker.patch("services.pipeline.extract.sleep")
 
         # Act
         extract_game_data(game_ids, destination_dir)
@@ -264,7 +265,7 @@ class TestExtractGameData:
         # Arrange
         destination_dir = tmp_path / "game_data"
         mock_bulk_query_things = mocker.patch(
-            "src.pipeline.extract.BggXmlApi2.bulk_query_things", return_value=[]
+            "services.pipeline.extract.BggXmlApi2.bulk_query_things", return_value=[]
         )
 
         # Act
