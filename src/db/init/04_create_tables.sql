@@ -14,6 +14,7 @@ CREATE TABLE game_details
     std_dev_ratings real,
     min_players   int,
     max_players   int,
+    playing_time  int,
     min_playtime  int,
     max_playtime  int,
     min_age       int,

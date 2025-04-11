@@ -19,6 +19,7 @@ class GameDetails(Base):  # type: ignore
     std_dev_ratings = Column(Float)
     min_players = Column(Integer)
     max_players = Column(Integer)
+    playing_time = Column(Integer)
     min_playtime = Column(Integer)
     max_playtime = Column(Integer)
     min_age = Column(Integer)
